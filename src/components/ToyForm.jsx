@@ -1,20 +1,23 @@
 import React, { useState } from "react";
 
+// ToyForm is a controlled form component for creating a new toy.
+// On submit it POSTs to the backend and calls onAddToy to update App state.
 function ToyForm({ onAddToy }) {
   const [name, setName] = useState("");
   const [image, setImage] = useState("");
 
+  // POST /toys — sends new toy data to backend, then updates parent state
   function handleSubmit(e) {
     e.preventDefault();
     fetch("http://localhost:3001/toys", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ name, image, likes: 0 }),
+      body: JSON.stringify({ name, image, likes: 0 }), // new toys start with 0 likes
     })
       .then((r) => r.json())
       .then((newToy) => {
-        onAddToy(newToy);
-        setName("");
+        onAddToy(newToy); // pass new toy up to App to append to state
+        setName("");      // reset form fields after successful creation
         setImage("");
       });
   }
